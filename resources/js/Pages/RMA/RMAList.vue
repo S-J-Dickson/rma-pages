@@ -1,0 +1,45 @@
+<script setup>
+import AppLayout from "../../Layouts/AppLayout.vue";
+import Card from "../../Components/Card.vue";
+import { Link } from '@inertiajs/vue3';
+
+defineProps({
+    data: Array
+});
+</script>
+
+<template>
+    <AppLayout>
+        <Card class="py-12">
+            <p class="pb-4">Implement your RMA list here</p>
+
+            <p class="pb-4">
+                The list should be a data table or other logical way to represent all the
+                available data
+            </p>
+
+            <p class="pb-4">Each item in the list should have the following:</p>
+
+            <ul class="pb-4" style="list-style-type: circle">
+                <li>Text displaying who created the RMA</li>
+                <li>The date and time that the RMA was created</li>
+                <li>A single string representing the items found on the RMA</li>
+                <li>A link to visit the RMA's more detailed information page (<code>rma.show</code>)</li>
+            </ul>
+
+            <p class="pb-4">
+                Make sure to check the <code>RMAController</code> and <code>RMAInListResource</code> classes
+                to see what's already been implemented
+            </p>
+
+            <p class="pb-4">There should also be a button somewhere on the page to create a new RMA.
+                This should take you to the <code>rma.create</code> route</p>
+
+            <p>
+                <Link :href="route('rma.create')">Click to Visit Create RMA Page</Link>
+            </p>
+        </Card>
+    </AppLayout>
+</template>
+
+
