@@ -20,14 +20,44 @@
                 <li>A way to input the item's identifier</li>
             </ul>
         </Card>
+
+
+        <Card class="py-12">
+            <button @click="createItem">Add new Item</button>
+        </Card>
+
+        <Item v-for="item in itemComponents" :key="item.id" :types="types"
+              @remove="removeItem(item.id)"></Item>
+
+
     </AppLayout>
 </template>
 
 <script setup>
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
+import {defineProps, ref} from 'vue';
+import Item from "./partials/Item.vue";
 
-defineProps({
+
+const props = defineProps({
     types: Array
 });
+
+const itemComponents = ref([]);
+let itemId = 1;
+
+function createItem() {
+    itemComponents.value.push({
+        id: itemId++,
+    });
+}
+
+function removeItem(id) {
+    const index = itemComponents.value.findIndex(item => item.id === id);
+    if (index !== -1) {
+        itemComponents.value.splice(index, 1);
+    }
+}
+
 </script>

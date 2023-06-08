@@ -1,30 +1,66 @@
 <template>
-    <ul>
-        <li v-for="subItem in items" :key="subItem.value">
+    <Card class="py-12">
+        <InputLabel value="Type"/>
+        <select id="type" v-model="selectedType">
+            <option v-for="item in types" :key="item.value" :value="item.value">{{ item.text }}</option>
+        </select>
 
-            <InputLabel value="type"/>
-            <InputError/>
-            <TextInput modelValue=""/>
+        <!-- Example of using the selected value to populate other fields -->
+        <div>
+            <InputLabel value="Item"/>
+            <select id="item">
+                <option v-for="item in getFieldValue" :key="item.value" :value="item.value">{{
+                        item.text
+                    }}
+                </option>
+            </select>
+        </div>
 
-            {{ subItem.text }}
-            {{ subItem.value }}
-        </li>
-    </ul>
+        <InputLabel value="Identifier"/>
+        <TextInput modelValue=""/>
+
+        <InputLabel value="Reason"/>
+        <TextInput modelValue=""/>
+
+        <button @click="handleRemove">Remove</button>
+    </Card>
 </template>
 
-<script>
+<script setup>
+import {computed, defineProps, defineEmits, ref, getCurrentInstance} from 'vue';
 import InputLabel from "../../../Components/InputLabel.vue";
-import InputError from "../../../Components/InputError.vue";
 import TextInput from "../../../Components/TextInput.vue";
+import Card from "../../../Components/Card.vue";
 
-export default {
-    components: {TextInput, InputError, InputLabel},
-    props: {
-        items: {
-            type: Array,
-            required: true
+
+const props = defineProps({
+    types: Array
+});
+
+const selectedType = ref('');
+
+const getFieldValue = computed(() => {
+    return searchItemsByValue(selectedType.value);
+});
+
+function searchItemsByValue(value) {
+    const results = [];
+
+    for (const category of props.types) {
+        if (category.value === value) {
+            results.push(...category.items);
         }
-    },
-    name: 'RMAItem'
+    }
+
+
+    return results;
+}
+
+const emitRemove = defineEmits(['remove']);
+
+const handleRemove = () => {
+    emitRemove('remove');
 };
+
+
 </script>
