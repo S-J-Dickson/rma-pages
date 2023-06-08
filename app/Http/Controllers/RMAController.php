@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateRMARequest;
 use App\Http\Resources\RMAInListResource;
 use App\Http\Resources\RMAResource;
+use App\Http\Services\RMAService;
 use App\Models\RMA\RMA;
 use App\Models\RMA\Type\BaseIdentifiableEnum;
 use App\Models\RMA\Type\RMA_TYPE;
@@ -53,12 +54,10 @@ class RMAController extends Controller
      */
     public function store(CreateRMARequest $request): RedirectResponse
     {
-
-        dd("here");
         //todo validate the identifier
 
         //todo create the RMA
-
+        RMA::createFromRequest($request);
         return redirect(route('rma.index'))->with('status', 'RMA Created Successfully');
     }
 

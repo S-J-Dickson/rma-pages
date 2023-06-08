@@ -25,11 +25,20 @@ class RMA extends Model
     {
         return DB::transaction(function () use ($request) {
             //todo create the RMA
-//            $rma =
+            $rma = RMA::create(
+                [
+                    "user_id" => $request->user()->id
+                ]
+            );
+
+            $rma->save();
+
+            //This works --- discussing further
+            //$rma->items()->createMany($request->validated()["items"]);
 
             //todo create RMA items from the request data
             foreach ($request->getItems() as $data) {
-
+                RMAItem::createFromData($rma, $data);
             }
 
             return $rma;
@@ -53,6 +62,6 @@ class RMA extends Model
      */
     public function items(): HasMany
     {
-        //todo return the items that belong to this RMA
+        return $this->hasMany(RMAItem::class, "rma_id", "id");
     }
 }

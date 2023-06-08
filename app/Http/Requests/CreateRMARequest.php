@@ -38,6 +38,12 @@ class CreateRMARequest extends FormRequest
         return array_map(fn($data) => new RMAItemData($data), $this->items);
     }
 
+    protected function passedValidation()
+    {
+//        $this->checkIdentifierValidation();
+    }
+
+
     /**
      * @return void
      * @throws ValidationException

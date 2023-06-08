@@ -18,6 +18,14 @@ class RMAItem extends Model
         'type' => RMA_TYPE::class
     ];
 
+    protected $fillable= [
+        "type",
+        "value",
+        "identifier",
+        "reason",
+        "rma_id"
+    ];
+
     /**
      * @param RMA $rma
      * @param RMAItemData $data
@@ -25,7 +33,9 @@ class RMAItem extends Model
      */
     public static function createFromData(RMA $rma, RMAItemData $data): static
     {
-        //todo implement creation of RMAItem from data
+        return RMAItem::create(
+            array_merge($data->toArray(),["rma_id" => $rma->id])
+        );
     }
 
     /**
