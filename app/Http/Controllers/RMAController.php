@@ -53,6 +53,8 @@ class RMAController extends Controller
      */
     public function store(CreateRMARequest $request): RedirectResponse
     {
+
+        dd("here");
         //todo validate the identifier
 
         //todo create the RMA

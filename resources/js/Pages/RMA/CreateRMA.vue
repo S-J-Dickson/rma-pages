@@ -23,12 +23,23 @@
 
 
         <Card class="py-12">
-            <button @click="createItem">Add new Item</button>
+            <button @click="addItem">Add new Item</button>
         </Card>
 
-        <Item v-for="item in itemComponents" :key="item.id" :types="types"
-              @remove="removeItem(item.id)"></Item>
+        <form @submit.prevent="submit">
 
+            <Card class="py-12">
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    Submit
+                </PrimaryButton>
+            </Card>
+
+            <Item v-for="item in form.items" :key="item.id" :types="types"
+                  :form="item"
+                  :main-form="form"
+                  @remove="removeItem(item.id)"></Item>
+
+        </form>
 
     </AppLayout>
 </template>
@@ -38,6 +49,8 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
 import {defineProps, ref} from 'vue';
 import Item from "./partials/Item.vue";
+import PrimaryButton from "../../Components/PrimaryButton.vue";
+import {useForm} from "@inertiajs/vue3";
 
 
 const props = defineProps({
@@ -47,17 +60,37 @@ const props = defineProps({
 const itemComponents = ref([]);
 let itemId = 1;
 
-function createItem() {
-    itemComponents.value.push({
-        id: itemId++,
-    });
+
+const form = useForm({
+    // Define form fields and validation rules in the parent component
+    // Example:
+    items: [],
+    // ...
+});
+
+
+function addItem() {
+    form.items.push(
+        {
+            id: itemId++,
+            type: "",
+            value: "",
+            identifier: "",
+            reason: ""
+        }
+    )
 }
 
 function removeItem(id) {
-    const index = itemComponents.value.findIndex(item => item.id === id);
+    const index = form.items.findIndex(item => item.id === id);
     if (index !== -1) {
-        itemComponents.value.splice(index, 1);
+        form.items.splice(index, 1);
     }
 }
+
+
+const submit = () => {
+    form.post(route('rma.store'), {});
+};
 
 </script>
