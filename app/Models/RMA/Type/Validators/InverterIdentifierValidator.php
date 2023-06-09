@@ -18,7 +18,7 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
 
         $sharedRules = ['required', 'string', 'size:10', 'uppercase', 'regex:/^.{6}G[0-9]+$/'];
 
-        if (strpos($key, 'AC') !== false) {
+        if (str_contains($key, 'AC')) {
             $validator = Validator::make(["identifier" => $identifier], [
                 'identifier' => array_merge(['starts_with:CE'], $sharedRules),
             ]);
@@ -28,15 +28,13 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
             }
 
             return null;
-        } elseif (strpos($key, 'HYBRID') !== false) {
+        } elseif (str_contains($key, 'HYBRID')) {
             $validator = Validator::make(["identifier" => $identifier], [
                 'identifier' => array_merge(['starts_with:SA,SD'], $sharedRules),
             ]);
 
-
             if ($validator->fails()) {
-                //#TODO improve error messages
-                return $validator->errors();
+                return $validator->errors()->getMessages()["identifier"];
             }
 
             return null;

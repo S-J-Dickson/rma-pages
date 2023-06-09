@@ -38,7 +38,7 @@ class BatteryIdentifierValidator implements ValidatesIdentifiers
         });
 
         if ($validator->fails()) {
-            return $validator->errors();
+            return $validator->errors()->getMessages()["identifier"];
         }
 
         return null;
