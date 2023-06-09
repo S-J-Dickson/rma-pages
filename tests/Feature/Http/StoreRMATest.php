@@ -69,7 +69,7 @@ class StoreRMATest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post(route('rma.store'), $data);
+        $response = $this->actingAs($user)->post(route('rma.store'), $data)->dumpSession();
 
         $response->assertRedirect();
 

@@ -16,7 +16,7 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
      */
     public function validate(BaseIdentifiableEnum $type, string $identifier): string|array|null
     {
-        $key = $type->key;
+        $value = $type->value;
 
         $sharedRules = ['required', 'string', 'size:10', 'uppercase', 'regex:/^.{6}G[0-9]+$/'];
         $ce = InventorIdentifier::CE;
@@ -24,7 +24,7 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
         $sd = InventorIdentifier::SD;
 
 
-        if (str_contains($key, InventorType::AC)) {
+        if (str_contains($value, InventorType::AC)) {
 
             $validator = Validator::make(["identifier" => $identifier], [
                 'identifier' => array_merge(["starts_with:$ce"], $sharedRules),
@@ -35,7 +35,7 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
             }
 
             return null;
-        } elseif (str_contains($key, InventorType::HYBRID)) {
+        } elseif (str_contains($value, InventorType::HYBRID)) {
             $validator = Validator::make(["identifier" => $identifier], [
                 'identifier' => array_merge(["starts_with:$sa,$sd"], $sharedRules),
             ]);
