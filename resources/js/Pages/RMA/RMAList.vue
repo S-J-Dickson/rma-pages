@@ -1,8 +1,8 @@
 <script setup>
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
-import { Link } from '@inertiajs/vue3';
-import { defineProps, ref,  } from 'vue';
+import {Link} from '@inertiajs/vue3';
+import {defineProps, ref,} from 'vue';
 
 const props = defineProps({
     data: Array,
@@ -12,8 +12,11 @@ const search = ref('');
 const loading = ref(false);
 
 const headers = [
-    { title: 'Created By', key: 'created_by' },
-    { title: 'Created At', key: 'created_at' },
+    {title: 'Created By', key: 'created_by'},
+    {title: 'Created At', key: 'created_at'},
+    {title: 'items', key: 'items'},
+    { title: 'Item Count', key: 'item_count'},
+    {title: '', key: 'rma_link'},
 ];
 
 
@@ -51,10 +54,7 @@ const headers = [
             </p>
         </Card>
 
-
         <Card>
-            <h1>TABLE??</h1>
-
             <v-data-table
                 :headers="headers"
                 :items="props.data"
@@ -62,10 +62,26 @@ const headers = [
                 :search="search"
                 :loading="loading"
                 class="elevation-1"
-            ></v-data-table>
+            >
 
-    </Card>
+                <template #item.items="{ item }">
+                    <ul>
+                        <li v-for="(identifier, index) in item.selectable.item_identifiers.slice(0, 2)" :key="index">
+                            {{ identifier.type }} ({{ identifier.identifier }}),
+                        </li>
+                        <li v-if="item.selectable.item_identifiers.length > 2">...</li>
+                    </ul>
+                </template>
 
+                <template #item.item_count="{ item }">
+                    {{ item.selectable.item_identifiers.length }}
+                </template>
+
+                <template #item.rma_link="{ item }">
+                    <Link :href="route('rma.show', { rma: item.selectable.id })">See More Details</Link>
+                </template>
+            </v-data-table>
+        </Card>
 
     </AppLayout>
 </template>
