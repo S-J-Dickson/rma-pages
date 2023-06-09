@@ -22,10 +22,7 @@ class RMAController extends Controller
      */
     public function index(Request $request): Response
     {
-        //inertiajs-tables-laravel-query-builder no longer supported
-
         $resources = RMAInListResource::collection(RMA::all())->toArray($request);
-
         return Inertia::render('RMA/RMAList', ['data' => $resources]);
     }
 
@@ -64,7 +61,6 @@ class RMAController extends Controller
      */
     public function show(RMA $rma, Request $request): Response
     {
-        //todo select the correct page component
-        return Inertia::render('', RMAResource::make($rma)->toArray($request));
+        return Inertia::render('RMA/ViewRMA', RMAResource::make($rma)->toArray($request));
     }
 }
