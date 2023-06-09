@@ -4,6 +4,7 @@ namespace App\Models\RMA\Type\Validators;
 
 use App\Models\RMA\Type\BaseIdentifiableEnum;
 use App\Models\RMA\Type\INVERTER;
+use Illuminate\Support\Facades\Validator;
 
 class InverterIdentifierValidator implements ValidatesIdentifiers
 {
@@ -22,6 +23,14 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
 
         //CE2125G001 is VALID
         //SE2125H00B is NOT VALID
+
+
+        dd($type);
+
+        $validator = Validator::make(["identifier" => $identifier], [
+            'identifier' => ['required', 'string', 'size:10', 'uppercase'],
+        ]);
+
 
         return null;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models\RMA\Type;
 
+use App\Models\RMA\Type\Validators\InverterIdentifierValidator;
 use App\Models\RMA\Type\Validators\ValidatesIdentifiers;
 
 class INVERTER extends BaseIdentifiableEnum
@@ -15,6 +16,6 @@ class INVERTER extends BaseIdentifiableEnum
      */
     protected function getValidator(): ValidatesIdentifiers
     {
-        // TODO: Implement getValidator() method.
+        return new InverterIdentifierValidator();
     }
 }
