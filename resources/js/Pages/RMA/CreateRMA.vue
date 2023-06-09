@@ -1,27 +1,36 @@
 <template>
     <AppLayout>
+        <Card class="py-4">
+            <h2 class="text-2xl font-bold mb-4">Create return merchandise authorization</h2>
+        </Card>
 
         <Card class="py-4">
-            <button @click="addItem">Add new Item</button>
+            <button @click="addItem" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Add new Item
+            </button>
         </Card>
 
         <form @submit.prevent="submit">
-
-
-            <Item v-for="item in form.items" :key="item.id" :types="types"
-                  :form="item"
-                  :main-form="form"
-                  @remove="removeItem(item.id)"></Item>
-
+            <Card v-if="form.items.length > 0" class="py-4" style="max-height: 600px; overflow-y: auto;">
+                <div class="scroll-container">
+                    <Item
+                        v-for="item in form.items"
+                        :key="item.id"
+                        :types="types"
+                        :form="item"
+                        :main-form="form"
+                        @remove="removeItem(item.id)"
+                    ></Item>
+                </div>
+            </Card>
 
             <Card class="py-4">
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton class="ml-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                               :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Submit
                 </PrimaryButton>
             </Card>
-
         </form>
-
     </AppLayout>
 </template>
 

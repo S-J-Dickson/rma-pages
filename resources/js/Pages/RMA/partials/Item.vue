@@ -27,7 +27,9 @@
         <TextInput v-model="form.reason" modelValue=""/>
         <InputError class="mt-2" :message='props.mainForm.errors["items."+ (props.form.id - 1)+ ".reason"]'/>
 
-        <button @click="handleRemove">Remove</button>
+        <button @click="handleRemove" class="bg-red-500 hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
+            Remove
+        </button>
     </Card>
 </template>
 
