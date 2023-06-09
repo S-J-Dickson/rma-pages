@@ -48,7 +48,7 @@ class RMAItem extends Model
      */
     public function rma(): BelongsTo
     {
-        //todo implement rma relationship
+        return $this->belongsTo(RMA::class,  "rma_id", "id",);
     }
 
     /**
