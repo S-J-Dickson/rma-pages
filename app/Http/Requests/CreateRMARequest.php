@@ -40,7 +40,8 @@ class CreateRMARequest extends FormRequest
 
     protected function passedValidation()
     {
-//        $this->checkIdentifierValidation();
+//        Check identifier validations here
+        $this->checkIdentifierValidation();
     }
 
 
@@ -63,5 +64,20 @@ class CreateRMARequest extends FormRequest
         if (sizeof($messages) > 0) {
             throw ValidationException::withMessages($messages);
         }
+    }
+
+    /**
+     * @return string[]
+     * @created 09-06-2023
+     */
+    public function messages()
+    {
+        //TODO::Add more for if no rules have been added
+        return [
+            'items.*.type.required' => 'Type field is required',
+            'items.*.value.required' => 'Value field is required',
+            'items.*.identifier.required' => 'Identifier field is required',
+            'items.*.reason.required' => 'Reason field is required',
+        ];
     }
 }
