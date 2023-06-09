@@ -55,15 +55,18 @@ The repo is using Laravel Sail and has been developed on Unbuntu but as Laravel 
 
 ### Overview
 
+Setting up the environment was straightforward as the project used Sqlite and docker.
 
-### Tests
+The other developer's backend code was impressive and easy to understand. I like how it handled the different types of hardware by having it in enums and classes. 
+
+The alternative method is to save the types in the database and have slug_id column, which will then be represented in the database and made not editable; this way, you can have a crud for your hardware and change the key, description, and value by changing the database record rather than changing the code base. The downside is that you must always ensure the slug_id stored in the database is the same as your enum const in the code base.
+
+Overall, what was asked of me was clear and decisive. The challenge for me was picking up Vue.js and Inertia.js to tackle this. I used the documentation and chatgpt and looked at the code base of profiles(auth login, registration) to see how it worked.
 
 
 ### Designs
-See brief.
+Login and see description.
 
-
-### Improvements
 
 
 
