@@ -2,6 +2,7 @@
 
 namespace App\Models\RMA\Type\Validators;
 
+use App\Enums\BatteryIdentifier;
 use App\Models\RMA\Type\BaseIdentifiableEnum;
 use App\Models\RMA\Type\BATTERY;
 use Dflydev\DotAccessData\Data;
@@ -16,8 +17,12 @@ class BatteryIdentifierValidator implements ValidatesIdentifiers
     public function validate(BaseIdentifiableEnum $type, string $identifier): string|array|null
     {
 
+        $be = BatteryIdentifier::BE;
+        $bb = BatteryIdentifier::BB;
+        $bg = BatteryIdentifier::BG;
+
         $validator = Validator::make(["identifier" => $identifier], [
-            'identifier' => ['required', 'string', 'size:12', 'starts_with:BE,BB,BG', 'uppercase'],
+            'identifier' => ['required', 'string', 'size:12', "starts_with:$be,$bb,$bg", 'uppercase'],
         ]);
 
         $validator->after(function ($validator) use ($identifier, $type) {

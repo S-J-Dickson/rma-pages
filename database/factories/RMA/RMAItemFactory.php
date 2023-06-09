@@ -2,6 +2,7 @@
 
 namespace Database\Factories\RMA;
 
+use App\Enums\BatteryIdentifier;
 use App\Enums\InventorIdentifier;
 use App\Enums\inventorType;
 use App\Models\RMA\RMA;
@@ -47,23 +48,32 @@ class RMAItemFactory extends Factory
         return [
             'type' => $type->value,
             'value' => call_user_func([$type->getAssociatedEnumClass(), 'getRandomValue']),
-            'identifier' => strtoupper($faker->bothify('??####?###')), //not actually valid, but generating so something is there
+            'identifier' => strtoupper($faker->bothify('??####?###')),
+            //not actually valid, but generating so something is there
             'reason' => $faker->sentence
         ];
     }
 
 
+    /**
+     * @throws Exception
+     */
     private static function createValidIdentifier(RMA_TYPE $type, string $value, Generator $faker)
     {
+        dump($type->value);
+
         return match ($type->value) {
-            RMA_TYPE::BATTERY => self::createBatteryIdentifier($type, $value),
-            RMA_TYPE::INVERTER => self::createInverterIdentifier($value),
+            RMA_TYPE::BATTERY => self::createBatteryIdentifier($type, $value, $faker),
+            RMA_TYPE::INVERTER => self::createInverterIdentifier($type, $faker),
             RMA_TYPE::PERIPHERAL => self::createPeripheralIdentifier($faker),
             default => throw new Exception("Type does not exist, please add enum type and classes."),
         };
     }
 
-    private static function createInverterIdentifier(RMA_TYPE $type, string $value, Generator $faker)
+    /**
+     * @throws Exception
+     */
+    private static function createInverterIdentifier(RMA_TYPE $type, Generator $faker)
     {
         $key = $type->key;
 
@@ -75,7 +85,7 @@ class RMAItemFactory extends Factory
         if (str_contains($key, InventorType::AC)) {
             $identifier = $ce;
         } elseif (str_contains($key, InventorType::HYBRID)) {
-            $identifier = $hybrid[$faker->numberBetween(0, 1)];
+            $identifier = $hybrid[$faker->numberBetween(0, (sizeof($hybrid) - 1))];
         }
 
         if (is_null($identifier)) {
@@ -85,9 +95,16 @@ class RMAItemFactory extends Factory
         return $identifier . $faker->bothify('####') . "G" . $faker->bothify('###');
     }
 
-    private static function createBatteryIdentifier(string $value)
+    private static function createBatteryIdentifier(RMA_TYPE $type, string $value, Generator $faker): string
     {
-        return "11243131";
+        $initialIdentifier = [BatteryIdentifier::BE, BatteryIdentifier::BB, BatteryIdentifier::BG];
+
+        $identifier = $initialIdentifier[$faker->numberBetween(0, (sizeof($initialIdentifier)) - 1)];
+
+        $numbersOnlyBattery = preg_replace("/[^0-9]/", "", $type->key);
+
+
+        return $identifier . $numbersOnlyBattery . $faker->bothify('########');
     }
 
 

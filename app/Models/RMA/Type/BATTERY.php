@@ -16,8 +16,6 @@ class BATTERY extends BaseIdentifiableEnum
      */
     protected function getValidator(): ValidatesIdentifiers
     {
-        // TODO: Implement getValidator() method.
-
         return new BatteryIdentifierValidator();
     }
 }
