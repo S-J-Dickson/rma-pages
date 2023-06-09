@@ -26,8 +26,8 @@ class CreateRMATest extends TestCase
                 'text' => $type->description,
                 'value' => $type->value,
                 'items' => $type->getAssociatedInstanceMembers()->map(fn(BaseIdentifiableEnum $member) => [
-                    'text' => $type->description,
-                    'value' => $type->value
+                    'text' =>  $member->description,
+                    'value' => $member->value
                 ])->toArray()
             ])->toArray();
 
