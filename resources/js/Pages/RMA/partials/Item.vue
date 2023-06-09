@@ -1,5 +1,5 @@
 <template>
-    <Card class="py-12">
+    <Card class="py-4">
         <InputLabel value="Type"/>
         <select id="type" v-model="form.type">
             <option v-for="item in types" :key="item.value" :value="item.value">{{ item.text }}</option>
