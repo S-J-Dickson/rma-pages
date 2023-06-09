@@ -35,6 +35,7 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
 
 
             if ($validator->fails()) {
+                //#TODO improve error messages
                 return $validator->errors();
             }
 
