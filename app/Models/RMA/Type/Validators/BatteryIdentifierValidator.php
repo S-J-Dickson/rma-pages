@@ -4,6 +4,7 @@ namespace App\Models\RMA\Type\Validators;
 
 use App\Models\RMA\Type\BaseIdentifiableEnum;
 use App\Models\RMA\Type\BATTERY;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Validator;
 
 class BatteryIdentifierValidator implements ValidatesIdentifiers
@@ -21,8 +22,7 @@ class BatteryIdentifierValidator implements ValidatesIdentifiers
 
         $validator->after(function ($validator) use ($identifier, $type) {
 
-            //TODO::Description MAY CHANGE USE KEY INSTEAD!
-            $numbersOnlyBattery = preg_replace("/[^0-9]/", "", $type->description);
+            $numbersOnlyBattery = preg_replace("/[^0-9]/", "", $type->key);
             $numbersOnlyIdentifier = preg_replace("/[^0-9]/", "", $identifier);
 
             $thirdAndFourthCharacters = substr($identifier, 2, 2);
