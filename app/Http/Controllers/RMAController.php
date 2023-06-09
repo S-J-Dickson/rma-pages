@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateRMARequest;
 use App\Http\Resources\RMAInListResource;
 use App\Http\Resources\RMAResource;
-use App\Http\Services\RMAService;
 use App\Models\RMA\RMA;
 use App\Models\RMA\Type\BaseIdentifiableEnum;
 use App\Models\RMA\Type\RMA_TYPE;
@@ -23,8 +22,9 @@ class RMAController extends Controller
      */
     public function index(Request $request): Response
     {
-        //todo get resources
-        $resources = RMAInListResource::collection([])->toArray($request);
+        //inertiajs-tables-laravel-query-builder no longer supported
+
+        $resources = RMAInListResource::collection(RMA::all())->toArray($request);
 
         return Inertia::render('RMA/RMAList', ['data' => $resources]);
     }
@@ -36,7 +36,6 @@ class RMAController extends Controller
     {
         return Inertia::render('RMA/CreateRMA', [
             'types' => RMA_TYPE::getCollection()->map(fn(RMA_TYPE $type) => [
-                //todo assign correct values for text and value
                 'text' => $type->description,
                 'value' => $type->value,
                 'items' => $type->getAssociatedInstanceMembers()->map(fn(BaseIdentifiableEnum $member) => [
@@ -54,9 +53,6 @@ class RMAController extends Controller
      */
     public function store(CreateRMARequest $request): RedirectResponse
     {
-        //todo validate the identifier
-
-        //todo create the RMA
         RMA::createFromRequest($request);
         return redirect(route('rma.index'))->with('status', 'RMA Created Successfully');
     }
@@ -66,7 +62,7 @@ class RMAController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function show($rma, Request $request): Response
+    public function show(RMA $rma, Request $request): Response
     {
         //todo select the correct page component
         return Inertia::render('', RMAResource::make($rma)->toArray($request));

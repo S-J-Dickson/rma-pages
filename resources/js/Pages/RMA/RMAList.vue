@@ -2,10 +2,24 @@
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
 import { Link } from '@inertiajs/vue3';
+import { defineComponent, defineProps, ref,  } from 'vue';
 
-defineProps({
-    data: Array
+
+const props = defineProps({
+    data: Array,
 });
+
+const search = ref('');
+const loading = ref(false);
+
+const headers = [
+    { text: 'Created By', value: 'created_by' },
+    { text: 'Date and Time', value: 'created_at' },
+    // { text: 'Item Type', value: 'item_type' },
+    // { text: 'Identifier', value: 'identifier' },
+];
+
+
 </script>
 
 <template>
@@ -39,6 +53,23 @@ defineProps({
                 <Link :href="route('rma.create')">Click to Visit Create RMA Page</Link>
             </p>
         </Card>
+
+
+        <Card>
+            <h1>TABLE??</h1>
+
+            <v-data-table
+                :headers="headers"
+                :items="data"
+                item-key="created_at"
+                :search="search"
+                :loading="loading"
+                class="elevation-1"
+            ></v-data-table>
+
+    </Card>
+
+
     </AppLayout>
 </template>
 
