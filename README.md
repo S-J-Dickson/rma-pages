@@ -64,9 +64,7 @@ The alternative method is to save the types in the database and have slug_id col
 Overall, what was asked of me was clear and decisive. The challenge for me was picking up Vue.js and Inertia.js to tackle this. I used the documentation and chatgpt and looked at the code base of profiles(auth login, registration) to see how it worked.
 
 ### What has been completed?
- - The create page
- - Identifer validation
- - Storing the RMA and items to the DB
+ - Everything requested
 
 
 ### Designs
