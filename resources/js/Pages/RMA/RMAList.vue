@@ -2,8 +2,7 @@
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
 import { Link } from '@inertiajs/vue3';
-import { defineComponent, defineProps, ref,  } from 'vue';
-
+import { defineProps, ref,  } from 'vue';
 
 const props = defineProps({
     data: Array,
@@ -13,10 +12,8 @@ const search = ref('');
 const loading = ref(false);
 
 const headers = [
-    { text: 'Created By', value: 'created_by' },
-    { text: 'Date and Time', value: 'created_at' },
-    // { text: 'Item Type', value: 'item_type' },
-    // { text: 'Identifier', value: 'identifier' },
+    { title: 'Created By', key: 'created_by' },
+    { title: 'Created At', key: 'created_at' },
 ];
 
 
@@ -60,7 +57,7 @@ const headers = [
 
             <v-data-table
                 :headers="headers"
-                :items="data"
+                :items="props.data"
                 item-key="created_at"
                 :search="search"
                 :loading="loading"
