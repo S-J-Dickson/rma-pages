@@ -14,24 +14,33 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
      */
     public function validate(BaseIdentifiableEnum $type, string $identifier): string|array|null
     {
-        //the identifier must be 10 characters long
-        //if the type is a hybrid inverter, the identifier must start with characters 'SA' or 'SD'
-        //if the type is an AC coupled inverter, the identifier must start with characters 'CE'
-        //the 7th character in the identifier must be the letter 'G'
-        //the rest of the identifier must be made up of numbers
-        //the identifier is case-sensitive
+        $key = $type->key;
 
-        //CE2125G001 is VALID
-        //SE2125H00B is NOT VALID
+        $sharedRules = ['required', 'string', 'size:10', 'uppercase', 'regex:/^.{6}G[0-9]+$/'];
+
+        if (strpos($key, 'AC') !== false) {
+            $validator = Validator::make(["identifier" => $identifier], [
+                'identifier' => array_merge(['starts_with:CE'], $sharedRules),
+            ]);
+
+            if ($validator->fails()) {
+                return $validator->errors();
+            }
+
+            return null;
+        } elseif (strpos($key, 'HYBRID') !== false) {
+            $validator = Validator::make(["identifier" => $identifier], [
+                'identifier' => array_merge(['starts_with:SA,SD'], $sharedRules),
+            ]);
 
 
-        dd($type);
+            if ($validator->fails()) {
+                return $validator->errors();
+            }
 
-        $validator = Validator::make(["identifier" => $identifier], [
-            'identifier' => ['required', 'string', 'size:10', 'uppercase'],
-        ]);
+            return null;
+        }
 
-
-        return null;
+        return "Select Hybrid or AC type.";
     }
 }

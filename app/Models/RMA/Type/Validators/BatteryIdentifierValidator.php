@@ -21,6 +21,7 @@ class BatteryIdentifierValidator implements ValidatesIdentifiers
 
         $validator->after(function ($validator) use ($identifier, $type) {
 
+            //TODO::Description MAY CHANGE USE KEY INSTEAD!
             $numbersOnlyBattery = preg_replace("/[^0-9]/", "", $type->description);
             $numbersOnlyIdentifier = preg_replace("/[^0-9]/", "", $identifier);
 
