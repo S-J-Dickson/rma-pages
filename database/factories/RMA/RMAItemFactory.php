@@ -23,8 +23,9 @@ class RMAItemFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     * @throws Exception
      */
-    public function definition()
+    public function definition(): array
     {
         return array_merge(['rma_id' => RMA::factory()],
             static::makeData($this->faker));
@@ -33,6 +34,7 @@ class RMAItemFactory extends Factory
     /**
      * @param Generator $faker
      * @return array
+     * @throws Exception
      */
     public static function makeData(Generator $faker): array
     {
@@ -53,9 +55,13 @@ class RMAItemFactory extends Factory
 
 
     /**
+     * @param RMA_TYPE $type
+     * @param string $value
+     * @param Generator $faker
+     * @return string
      * @throws Exception
      */
-    private static function createValidIdentifier(RMA_TYPE $type, string $value, Generator $faker)
+    private static function createValidIdentifier(RMA_TYPE $type, string $value, Generator $faker): string
     {
         return match ((string) $type->value) {
             RMA_TYPE::BATTERY => self::createBatteryIdentifier($type, $value, $faker),
@@ -66,6 +72,10 @@ class RMAItemFactory extends Factory
     }
 
     /**
+     * @param RMA_TYPE $type
+     * @param $value
+     * @param Generator $faker
+     * @return string
      * @throws Exception
      */
     private static function createInverterIdentifier(RMA_TYPE $type, $value, Generator $faker): string
@@ -88,6 +98,12 @@ class RMAItemFactory extends Factory
         return $identifier . $faker->bothify('####') . "G" . $faker->bothify('###');
     }
 
+    /**
+     * @param RMA_TYPE $type
+     * @param string $value
+     * @param Generator $faker
+     * @return string
+     */
     private static function createBatteryIdentifier(RMA_TYPE $type, string $value, Generator $faker): string
     {
         $initialIdentifier = [BatteryIdentifier::BE, BatteryIdentifier::BB, BatteryIdentifier::BG];
@@ -95,9 +111,6 @@ class RMAItemFactory extends Factory
         $identifier = $initialIdentifier[$faker->numberBetween(0, (sizeof($initialIdentifier)) - 1)];
 
         $numbersOnlyBattery = preg_replace("/[^0-9]/", "", $value);
-
-
-        dump($value, $numbersOnlyBattery);
 
         return $identifier . $numbersOnlyBattery . $faker->bothify('########');
     }

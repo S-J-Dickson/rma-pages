@@ -3,12 +3,10 @@
 namespace Tests\Feature\Http;
 
 use App\Models\RMA\RMA;
-use App\Models\RMA\Type\BATTERY;
 use App\Models\RMA\Type\INVERTER;
 use App\Models\RMA\Type\RMA_TYPE;
 use App\Models\User;
 use Database\Factories\RMA\RMAItemFactory;
-use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -69,7 +67,7 @@ class StoreRMATest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post(route('rma.store'), $data)->dumpSession();
+        $response = $this->actingAs($user)->post(route('rma.store'), $data);
 
         $response->assertRedirect();
 
