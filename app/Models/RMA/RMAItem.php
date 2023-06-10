@@ -2,6 +2,7 @@
 
 namespace App\Models\RMA;
 
+use App\Exceptions\InvalidEnumTypeException;
 use App\Models\RMA\Type\BaseIdentifiableEnum;
 use App\Models\RMA\Type\BATTERY;
 use App\Models\RMA\Type\INVERTER;
@@ -62,7 +63,7 @@ class RMAItem extends Model
             RMA_TYPE::BATTERY => new BATTERY($this->value),
             RMA_TYPE::INVERTER => new INVERTER($this->value),
             RMA_TYPE::PERIPHERAL => new PERIPHERAL($this->value),
-            default => throw new Exception("Type does not exist, please add enum type and classes."),
+            default => throw new InvalidEnumTypeException(),
         };
     }
 }

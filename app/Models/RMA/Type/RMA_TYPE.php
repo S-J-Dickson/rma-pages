@@ -3,6 +3,7 @@
 namespace App\Models\RMA\Type;
 
 use App\Enums\BaseEnum;
+use App\Exceptions\InvalidEnumTypeException;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -48,14 +49,11 @@ class RMA_TYPE extends BaseEnum
      */
     public function getAssociatedEnumClass(): string
     {
-        //todo get the enum class associated with this instance's value
-        //static::BATTERY should correspond to BATTERY::class etc
-
         return match ($this->value) {
             self::BATTERY => BATTERY::class,
             self::INVERTER => INVERTER::class,
             self::PERIPHERAL => PERIPHERAL::class,
-            default => throw new Exception("Type does not exist, please add enum type and classes."),
+            default => throw new InvalidEnumTypeException(),
         };
     }
 }

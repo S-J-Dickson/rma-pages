@@ -5,8 +5,8 @@ namespace Database\Factories\RMA;
 use App\Enums\BatteryIdentifier;
 use App\Enums\InventorIdentifier;
 use App\Enums\InventorType;
+use App\Exceptions\InvalidEnumTypeException;
 use App\Models\RMA\RMA;
-use App\Models\RMA\Type\BATTERY;
 use App\Models\RMA\Type\RMA_TYPE;
 use Exception;
 use Faker\Generator;
@@ -47,8 +47,11 @@ class RMAItemFactory extends Factory
         return [
             'type' => $type->value,
             'value' => $value,
+            // The identifier in the database structure is not nullable so always needs to provided
+            // It is also not have to be unique
+            // I would communicate to the stakeholders to find out if this is the case as peripherals
+            // accept anything as identifier
             'identifier' => $identifier,
-            //not actually valid, but generating so something is there
             'reason' => $faker->sentence
         ];
     }
@@ -60,6 +63,9 @@ class RMAItemFactory extends Factory
      * @param Generator $faker
      * @return string
      * @throws Exception
+     * This method could be moved to the RMAType class (BATTERY, INVENTOR ETC) and be used for generating identifiers
+     * the code be tweaked if the identifier needed to be unique
+     * BaseIdentifiableEnum could have function declared createValidIdentifier: string
      */
     private static function createValidIdentifier(RMA_TYPE $type, string $value, Generator $faker): string
     {
@@ -67,7 +73,7 @@ class RMAItemFactory extends Factory
             RMA_TYPE::BATTERY => self::createBatteryIdentifier($type, $value, $faker),
             RMA_TYPE::PERIPHERAL => self::createPeripheralIdentifier($faker),
             RMA_TYPE::INVERTER => self::createInverterIdentifier($type, $value, $faker),
-            default => throw new Exception("Type does not exist, please add enum type and classes.")
+            default => throw new InvalidEnumTypeException(),
         };
     }
 
