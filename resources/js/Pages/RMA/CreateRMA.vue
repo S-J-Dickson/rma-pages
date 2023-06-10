@@ -1,7 +1,7 @@
 <template>
     <AppLayout>
         <Card class="py-4">
-            <h2 class="text-2xl font-bold mb-4">Create return merchandise authorization</h2>
+            <Title :title="'Create return merchandise authorization'"></Title>
         </Card>
 
         <Card class="py-4">
@@ -41,6 +41,7 @@ import {defineProps, ref} from 'vue';
 import Item from "./partials/Item.vue";
 import PrimaryButton from "../../Components/PrimaryButton.vue";
 import {useForm} from "@inertiajs/vue3";
+import Title from "../../Components/Title.vue";
 
 
 const props = defineProps({

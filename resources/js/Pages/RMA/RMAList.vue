@@ -3,6 +3,7 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
 import {Link} from '@inertiajs/vue3';
 import {defineProps, ref,} from 'vue';
+import Title from "../../Components/Title.vue";
 
 const props = defineProps({
     data: Array,
@@ -26,7 +27,7 @@ const headers = [
     <AppLayout>
 
         <Card class="py-12">
-            <h2 class="text-2xl font-bold mb-4">RMA Information</h2>
+            <Title :title="'RMA Information'"></Title>
         </Card>
 
         <Card class="pb-12">

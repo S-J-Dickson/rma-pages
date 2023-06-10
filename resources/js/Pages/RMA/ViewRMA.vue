@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
+import Title from "../../Components/Title.vue";
 
 defineProps({
     created_at: String,
@@ -12,7 +13,8 @@ defineProps({
 <template>
     <AppLayout>
         <Card class="py-12">
-            <h2 class="text-2xl font-bold mb-4">RMA Information</h2>
+            <Title :title="'RMA Information'"></Title>
+
 
             <div class="flex space-x-4 shadow-md bg-white p-4 mb-8">
                 <div class="w-1/2">
