@@ -80,7 +80,7 @@ class StoreRMATest extends TestCase
 
     /**
      * @testWith ["value"]
-     *
+     *           ["type"]
      */
     public function test_a_422_is_thrown_if_an_invalid_data_is_passed($field)
     {
