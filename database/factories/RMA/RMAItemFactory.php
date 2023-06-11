@@ -38,9 +38,16 @@ class RMAItemFactory extends Factory
      */
     public static function makeData(Generator $faker): array
     {
-        $type = RMA_TYPE::getRandomInstance();
+
+
+
+        $type = RMA_TYPE::getInstances()["INVERTER"];
+
+
 
         $value = call_user_func([$type->getAssociatedEnumClass(), 'getRandomValue']);
+
+
 
         $identifier = self::createValidIdentifier($type, $value, $faker);
 

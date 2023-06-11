@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\RMA\RMAItemData;
 use App\Models\RMA\Type\RMA_TYPE;
+use App\Rules\CheckRMAValue;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
@@ -20,13 +21,20 @@ class CreateRMARequest extends FormRequest
      */
     public function rules()
     {
-        //todo finish validation rules
+        $validTypes = RMA_TYPE::getValues();
+
         return [
             'items' => ['required', 'array'],
-            'items.*.type' => ['required', new EnumValue(RMA_TYPE::class)],
-            'items.*.value' => ['required'],
+            'items.*.type' => [
+                'required',
+                'in:' . implode(',', $validTypes),
+                new EnumValue(RMA_TYPE::class),
+            ],
+            'items.*.value' => [
+                'required',
+            ],
             'items.*.identifier' => ['required'],
-            'items.*.reason' => ['required'],
+            'items.*.reason' => ['required', 'max:500'],
         ];
     }
 
@@ -38,12 +46,38 @@ class CreateRMARequest extends FormRequest
         return array_map(fn($data) => new RMAItemData($data), $this->items);
     }
 
-    protected function passedValidation()
+    protected function passedValidation(): void
     {
-//        Check identifier validations here
+        $this->checkValueValidation();
         $this->checkIdentifierValidation();
     }
 
+
+    /**
+     * @return void
+     * @throws ValidationException
+     */
+    public function checkValueValidation(): void
+    {
+        $messages = [];
+
+        foreach ($this->getItems() as $index => $item) {
+
+            $type = RMA_TYPE::fromValue($item->type);
+
+            $values = array_flip($type->getAssociatedInstanceMembers()->toArray());
+
+            $isValid = array_key_exists($item->value, $values);
+
+            if(!$isValid){
+                $messages["items.{$index}.value"] = "Value does not belong to type.";
+            }
+        }
+
+        if (sizeof($messages) > 0) {
+            throw ValidationException::withMessages($messages);
+        }
+    }
 
     /**
      * @return void
@@ -54,7 +88,12 @@ class CreateRMARequest extends FormRequest
         $messages = [];
 
         foreach ($this->getItems() as $index => $item) {
-            $message = RMA_TYPE::fromValue($item->type)->validate($item->value, $item->identifier);
+
+            $type = RMA_TYPE::fromValue($item->type);
+
+             array_search($item->value, $type->getAssociatedInstanceMembers()->toArray());
+
+            $message = $type->validate($item->value, $item->identifier);
 
             if ($message !== null) {
                 $messages["items.{$index}.identifier"] = $message;
@@ -72,7 +111,6 @@ class CreateRMARequest extends FormRequest
      */
     public function messages()
     {
-        //TODO::Add more for if no rules have been added
         return [
             'items.*.type.required' => 'Type field is required',
             'items.*.value.required' => 'Value field is required',

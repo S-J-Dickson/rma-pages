@@ -68,7 +68,6 @@ class StoreRMATest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post(route('rma.store'), $data);
-
         $response->assertRedirect();
 
         $this->assertSame(RMA::count(), 1);
@@ -76,5 +75,27 @@ class StoreRMATest extends TestCase
         $rma = RMA::first();
 
         $this->assertSame($rma->items->count(), sizeof($data['items']));
+    }
+
+
+    /**
+     * @testWith ["value"]
+     *
+     */
+    public function test_a_422_is_thrown_if_an_invalid_data_is_passed($field)
+    {
+
+        $item = RMAItemFactory::makeData($this->faker);
+        $item[$field] = "incorrect";
+
+        $data = [
+            'items' => [$item]
+        ];
+
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->postJson(route('rma.store'), $data)
+            ->assertJsonValidationErrors("items.0.$field");
     }
 }
